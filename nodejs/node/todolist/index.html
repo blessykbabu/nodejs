@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>My TODOLIST</h2>
+    <form onsubmit="add(event)">
+        <input type="text" name="todo" id="todo">
+        <input type="submit" value="add">
+    </form>
+    <ol id="list"></ol>
+    <script>
+        let list=document.getElementById("list")
+        function add(event){
+            event.preventDefault();
+            let formData=new FormData(event.target);  //instead of this we can use getelementbyid to get the value in the input field
+
+            let todo=formData.get("todo")
+            fetch(`http://localhost:3000/set-todo?todo=${todo}`)
+            .then(res=>res.text())  //to convert text
+            .then(data=>{
+                console.log(data)
+                print() //here we call print functn becoz when add new list the get all data fom the filel
+            })
+            
+
+        }
+        function print(){
+            fetch(`http://localhost:3000/get-todo`)
+            .then(res =>res.json())
+            .then(data=>{
+                list.innerHTML="";
+                data.forEach((item,index)=>{
+                    let li=`<li>${item.todo}<button onClick="del(${index})">Delete</button></li>`;
+                    list.innerHTML +=li;
+                })
+            })
+        }
+        print()
+
+function del(index){
+    fetch(`http://localhost:3000/del-todo?id=${index}`)
+    .then(res =>res.text())
+    .then(data=>{
+        console.log(data)
+        print()
+    })
+}
+           
+    </script>
+</body>
+</html>
