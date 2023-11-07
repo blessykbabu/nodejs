@@ -79,6 +79,21 @@ const server = http.createServer((req, res) => {     //create server using http 
             })
         })
     }
+
+
+    if(path.pathname==="/edit-todo"){
+        // fs.readFile("./todos.json","utf-8",(error,data)=>{
+        //     if(error){
+        //         console.log(error)
+        //         res.end("error occured")
+        //         return;
+        //     } 
+            
+        // })
+      res.writeHead(200,"Conteny-Type":"text")
+        res.write("you are click edit button")
+            res.end()
+    }
     
 
 
