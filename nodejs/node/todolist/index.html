@@ -51,9 +51,11 @@ function del(index){
 }
 
 function  edit(index){
-    fetch(`http://localhost:3000/edit-todo?id=${index}`)
+    let newTodo=prompt("Enter new todo")
+    fetch(`http://localhost:3000/edit-todo?id=${index}&newTodo=${newTodo}`)
     .then(res=>res.text())
     .then(data=>{
+        // alert(data)
         console.log(data)
         print()
     })
