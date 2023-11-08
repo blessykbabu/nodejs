@@ -22,7 +22,7 @@ if(path.pathname==="/"){
 
 if(path.pathname==="/file-data"){
     let {name}=path.query
-    fs.writeFile("./data/"+name+".json",JSON.stringify(name),(error)=>{
+    fs.writeFile("./data/"+name+".json",JSON.stringify(path.query),(error)=>{
         if(error){
             console.log(error)
             res.end("error occured")
@@ -32,6 +32,41 @@ if(path.pathname==="/file-data"){
 })
 
 }
+
+if(path.pathname==="/user-details"){
+    let {name}=path.query
+    fs.readFile("./data/"+name+".json",(error,data)=>{
+        if(error){
+            console.log(error)
+            res.end("error occured")
+            return;
+        }
+       
+            res.write(data)
+            res.end()
+        })
+
+}
+if(path.pathname==="/directory"){
+    fs.readdir("./data",(error,data)=>{
+        let filePromise=data.map(item=>readFile("./data/"+item))
+        Promise.all(filePromise)
+        .then(result=>{
+            res.write(JSON.stringify(result))
+            res.end()
+        })
+    })
+}
+function readFile(url){
+    return new Promise((res,rej)=>{
+        fs.readFile(url,"utf-8",(error,data)=>{
+            if(error) rej(error);
+            res(JSON.parse(data))
+        })
+    })
+}
+
+
 })
 
 
